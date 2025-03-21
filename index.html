@@ -169,14 +169,15 @@
             // Animation for smooth transition
             document.getElementById('scholarshipTable').style.opacity = 0;
             setTimeout(function() {
-                // Fetch data from Google Sheets
+                // Fetch data from Google Sheets using the published URL and API
                 fetchScholarships(category);
                 document.getElementById('scholarshipTable').style.opacity = 1;
             }, 500);
         }
 
         function fetchScholarships(category) {
-            const sheetUrl = 'https://spreadsheets.google.com/feeds/list/1wGCTUp_gm4nM4QBkBJfyGEjMefaIzR2RLVwzYzwrk0U/od6/public/values?alt=json';
+            // Your published Google Sheets API URL
+            const sheetUrl = 'https://spreadsheets.google.com/feeds/list/2PACX-1vQ8uY2hS2Ub5BVYAIPKKYuCc-tAWy2fj_E5ppF-e4z_m6KPsfMQCwytFYHiNdR2vCePpDBV0-Ah03cH/od6/public/values?alt=json';
             
             fetch(sheetUrl)
                 .then(response => response.json())
