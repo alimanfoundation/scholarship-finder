@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholarship Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        select, input, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background: blue;
+            color: white;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid white;
+        }
+        th {
+            background: #444;
+        }
+        a {
+            color: cyan;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Scholarship Finder</h2>
+        <select id="categoryFilter">
+            <option value="">All Categories</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Search Scholarships" />
+        <button onclick="filterScholarships()">Search</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama Beasiswa</th>
+                    <th>Kategori/Jenjang</th>
+                    <th>Deadline</th>
+                    <th>Deskripsi</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <tbody id="scholarshipTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ8uY2hS2Ub5BVYAIPKKYuCc-tAWy2fj_E5ppF-e4z_m6KPsfMQCwytFYHiNdR2vCePpDBV0-Ah03cH/pub?output=csv";
+        let scholarships = [];
+
+        function escapeXml(text) {
+            if (!text) return "";
+            return text.replace(/&/g, "&amp;")
+                       .replace(/</g, "&lt;")
+                       .replace(/>/g, "&gt;")
+                       .replace(/"/g, "&quot;")
+                       .replace(/'/g, "&#39;");
+        }
+
+        function parseCSV(text) {
+            let rows = text.split("\n").map(row => row.split(","));
+            return rows.slice(1).map(row => row.map(cell => escapeXml(cell.trim())));
+        }
+
+        fetch(sheetUrl)
+            .then(response => response.text())
+            .then(data => {
+                scholarships = parseCSV(data);
+                populateCategoryFilter();
+                displayScholarships(scholarships);
+            })
+            .catch(error => console.error("Error loading CSV:", error));
+
+        function populateCategoryFilter() {
+            let categories = [...new Set(scholarships.map(s => s[1]))].filter(Boolean);
+            let filter = document.getElementById("categoryFilter");
+            categories.forEach(category => {
+                let option = document.createElement("option");
+                option.value = category;
+                option.textContent = category;
+                filter.appendChild(option);
+            });
+        }
+
+        function displayScholarships(data) {
+            let table = document.getElementById("scholarshipTable");
+            table.innerHTML = "";
+            data.forEach(s => {
+                let url = s[4] ? s[4].replace(/&/g, "&amp;") : "#"; // Fix & in URLs
+                let row = `<tr>
+                    <td>${s[0]}</td>
+                    <td>${s[1]}</td>
+                    <td>${s[2]}</td>
+                    <td>${s[3]}</td>
+                    <td><a href="${url}" target="_blank">Apply</a></td>
+                </tr>`;
+                table.innerHTML += row;
+            });
+        }
+
+        function filterScholarships() {
+            let category = document.getElementById("categoryFilter").value;
+            let search = document.getElementById("searchInput").value.toLowerCase();
+            let filtered = scholarships.filter(s =>
+                (category === "" || s[1] === category) &&
+                (s[0].toLowerCase().includes(search) || s[3].toLowerCase().includes(search))
+            );
+            displayScholarships(filtered);
+        }
+    </script>
+</body>
+</html>
