@@ -169,21 +169,23 @@
             // Animation for smooth transition
             document.getElementById('scholarshipTable').style.opacity = 0;
             setTimeout(function() {
-                // Fetch data from Google Sheets using the published URL and API
+                // Fetch data from Google Sheets using the published URL and API v4
                 fetchScholarships(category);
                 document.getElementById('scholarshipTable').style.opacity = 1;
             }, 500);
         }
 
         function fetchScholarships(category) {
-            // Your published Google Sheets API URL
-            const sheetUrl = 'https://spreadsheets.google.com/feeds/list/2PACX-1vQ8uY2hS2Ub5BVYAIPKKYuCc-tAWy2fj_E5ppF-e4z_m6KPsfMQCwytFYHiNdR2vCePpDBV0-Ah03cH/od6/public/values?alt=json';
-            
-            fetch(sheetUrl)
+            const apiKey = 'AIzaSyCZXdufQVEmKG3LXP2fXZmDZUTOZZmBivI';
+            const spreadsheetId = '1wGCTUp_gm4nM4QBkBJfyGEjMefaIzR2RLVwzYzwrk0U';
+            const sheetName = 'Sheet1';  // Change to the correct sheet name if needed
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=${apiKey}`;
+
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    const entries = data.feed.entry;
-                    const scholarships = entries.filter(entry => entry.gsx$kategori.$t === category);
+                    const entries = data.values;
+                    const scholarships = entries.filter(entry => entry[1] === category); // Assuming category is in the second column
                     displayScholarships(scholarships);
                 })
                 .catch(error => console.error('Error fetching data:', error));
@@ -194,11 +196,11 @@
             tableBody.innerHTML = '';  // Clear existing data
             scholarships.forEach(function(scholarship) {
                 let row = `<tr>
-                    <td>${scholarship.gsx$namabeasiswa.$t}</td>
-                    <td>${scholarship.gsx$kategori.$t}</td>
-                    <td>${scholarship.gsx$deadline.$t}</td>
-                    <td>${scholarship.gsx$deskripsi.$t}</td>
-                    <td><a href="${scholarship.gsx$link.$t}" target="_blank">Apply</a></td>
+                    <td>${scholarship[0]}</td>  <!-- Assuming name is in the first column -->
+                    <td>${scholarship[1]}</td>  <!-- Assuming category is in the second column -->
+                    <td>${scholarship[2]}</td>  <!-- Assuming deadline is in the third column -->
+                    <td>${scholarship[3]}</td>  <!-- Assuming description is in the fourth column -->
+                    <td><a href="${scholarship[4]}" target="_blank">Apply</a></td> <!-- Assuming link is in the fifth column -->
                 </tr>`;
                 tableBody.innerHTML += row;
             });
