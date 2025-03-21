@@ -1,61 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scholarship Finder</title>
+    <title>Al Iman Foundation Scholarship Finder</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #222;
-            color: white;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
             text-align: center;
         }
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
         .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: #333;
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
-        select, input, button {
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
+        .filter-buttons {
+            margin-bottom: 20px;
         }
-        button {
-            background: blue;
+        .filter-buttons button {
+            background-color: #003366;
             color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+        }
+        .filter-buttons button:hover {
+            background-color: #0055aa;
         }
         table {
             width: 100%;
-            margin-top: 20px;
             border-collapse: collapse;
+            margin-top: 20px;
         }
         th, td {
-            padding: 10px;
-            border: 1px solid white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: left;
         }
         th {
-            background: #444;
-        }
-        a {
-            color: cyan;
+            background-color: #003366;
+            color: white;
         }
     </style>
 </head>
 <body>
+    <header>Al Iman Foundation Scholarship Finder</header>
     <div class="container">
-        <h2>Scholarship Finder</h2>
-        <select id="categoryFilter">
-            <option value="">All Categories</option>
-        </select>
-        <input type="text" id="searchInput" placeholder="Search Scholarships" />
-        <button onclick="filterScholarships()">Search</button>
+        <div class="filter-buttons">
+            <button onclick="filterCategory('bachelor')">S1 / Bachelor</button>
+            <button onclick="filterCategory('master')">S2 / Master</button>
+            <button onclick="filterCategory('phd')">S3 / PhD</button>
+            <button onclick="filterCategory('general')">General</button>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -66,72 +79,15 @@
                     <th>Link</th>
                 </tr>
             </thead>
-            <tbody id="scholarshipTable"></tbody>
+            <tbody id="scholarship-list">
+                <!-- Data scholarships will be inserted here dynamically -->
+            </tbody>
         </table>
     </div>
-
     <script>
-        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ8uY2hS2Ub5BVYAIPKKYuCc-tAWy2fj_E5ppF-e4z_m6KPsfMQCwytFYHiNdR2vCePpDBV0-Ah03cH/pub?output=csv";
-        let scholarships = [];
-
-        function escapeXml(text) {
-            if (!text) return "";
-            return text.replace(/&/g, "&amp;")
-                       .replace(/</g, "&lt;")
-                       .replace(/>/g, "&gt;")
-                       .replace(/"/g, "&quot;")
-                       .replace(/'/g, "&#39;");
-        }
-
-        function parseCSV(text) {
-            let rows = text.split("\n").map(row => row.split(","));
-            return rows.slice(1).map(row => row.map(cell => escapeXml(cell.trim())));
-        }
-
-        fetch(sheetUrl)
-            .then(response => response.text())
-            .then(data => {
-                scholarships = parseCSV(data);
-                populateCategoryFilter();
-                displayScholarships(scholarships);
-            })
-            .catch(error => console.error("Error loading CSV:", error));
-
-        function populateCategoryFilter() {
-            let categories = [...new Set(scholarships.map(s => s[1]))].filter(Boolean);
-            let filter = document.getElementById("categoryFilter");
-            categories.forEach(category => {
-                let option = document.createElement("option");
-                option.value = category;
-                option.textContent = category;
-                filter.appendChild(option);
-            });
-        }
-
-        function displayScholarships(data) {
-            let table = document.getElementById("scholarshipTable");
-            table.innerHTML = "";
-            data.forEach(s => {
-                let url = s[4] ? s[4].replace(/&/g, "&amp;") : "#"; // Fix & in URLs
-                let row = `<tr>
-                    <td>${s[0]}</td>
-                    <td>${s[1]}</td>
-                    <td>${s[2]}</td>
-                    <td>${s[3]}</td>
-                    <td><a href="${url}" target="_blank">Apply</a></td>
-                </tr>`;
-                table.innerHTML += row;
-            });
-        }
-
-        function filterScholarships() {
-            let category = document.getElementById("categoryFilter").value;
-            let search = document.getElementById("searchInput").value.toLowerCase();
-            let filtered = scholarships.filter(s =>
-                (category === "" || s[1] === category) &&
-                (s[0].toLowerCase().includes(search) || s[3].toLowerCase().includes(search))
-            );
-            displayScholarships(filtered);
+        function filterCategory(category) {
+            alert('Filtering scholarships for: ' + category);
+            // Logic to filter scholarships by category will be added later
         }
     </script>
 </body>
