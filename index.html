@@ -28,21 +28,20 @@
             box-sizing: border-box;
         }
         .container {
-            width: 100%; /* Changed from 90% to 100% to fill the screen */
+            width: 90%;
+            max-width: 1200px;
             margin: 20px auto;
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             animation: fadeIn 0.5s ease-in-out;
-            box-sizing: border-box;
         }
         .filter-buttons {
             margin-bottom: 20px;
             display: flex;
             justify-content: center;
             gap: 10px;
-            flex-wrap: wrap; /* Ensure buttons stack on smaller screens */
         }
         .filter-buttons button, .filter-buttons select {
             background-color: #003366;
@@ -50,7 +49,7 @@
             border: none;
             padding: 12px 25px;
             margin: 5px;
-            border-radius: 8px;
+            border-radius: 8px;  /* Slight rounding for a neat look */
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s ease;
@@ -58,20 +57,20 @@
             align-items: center;
         }
         .filter-buttons button:hover, .filter-buttons select:hover {
-            background-color: #004f92;
+            background-color: #004f92; /* Change to a darker blue for readability */
         }
         .filter-buttons select {
             appearance: none;
             background-color: white;
-            color: black;
+            color: black; /* Text color changed to black */
             padding: 12px 25px;
             font-size: 16px;
-            border-radius: 8px;
+            border-radius: 8px;  /* Slight rounding for the dropdown */
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 300px;
+            width: 300px;  /* Adjusted to make the box longer */
             position: relative;
-            border: 2px solid #003366;
+            border: 2px solid #003366; /* Added border for visibility */
         }
         .filter-buttons select:focus {
             outline: none;
@@ -87,8 +86,8 @@
             color: #003366;
         }
         .filter-buttons select:hover {
-            background-color: #e6f1ff;
-            color: #003366;
+            background-color: #e6f1ff;  /* Typical hover for dropdown (light blue) */
+            color: #003366; /* Text color changed to blue when hovering */
         }
         table {
             width: 100%;
@@ -117,61 +116,10 @@
             font-size: 14px;
             text-align: center;
             margin-top: auto;
-            width: 100%;
-            box-sizing: border-box;
         }
         @keyframes fadeIn {
             0% { opacity: 0; }
             100% { opacity: 1; }
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            header {
-                font-size: 20px;
-                padding: 15px 0;
-            }
-            .filter-buttons {
-                flex-direction: column;
-            }
-            .filter-buttons select, .filter-buttons button {
-                width: 100%;  /* Make filter buttons and selects full width on mobile */
-            }
-            table {
-                width: 100%;
-                border: none;
-            }
-            th, td {
-                padding: 10px;
-            }
-            footer {
-                font-size: 12px;
-                padding: 15px;
-            }
-            /* Stack the table rows on smaller screens */
-            table, th, td {
-                display: block;
-            }
-            th {
-                display: none; /* Hide column headers */
-            }
-            tr {
-                margin-bottom: 10px;
-                background-color: #fff;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                padding: 10px;
-            }
-            td {
-                display: flex;
-                justify-content: space-between;
-                padding: 10px 0;
-                border: none;
-            }
-            td:before {
-                content: attr(data-label);
-                font-weight: bold;
-                padding-right: 10px;
-            }
         }
     </style>
 </head>
@@ -218,8 +166,10 @@
         });
 
         function filterCategory(category) {
+            // Animation for smooth transition
             document.getElementById('scholarshipTable').style.opacity = 0;
             setTimeout(function() {
+                // Fetch data from Google Sheets using the published URL and API v4
                 fetchScholarships(category);
                 document.getElementById('scholarshipTable').style.opacity = 1;
             }, 500);
@@ -228,14 +178,14 @@
         function fetchScholarships(category) {
             const apiKey = 'AIzaSyCZXdufQVEmKG3LXP2fXZmDZUTOZZmBivI';
             const spreadsheetId = '1wGCTUp_gm4nM4QBkBJfyGEjMefaIzR2RLVwzYzwrk0U';
-            const sheetName = 'Sheet1';
+            const sheetName = 'Sheet1';  // Change to the correct sheet name if needed
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=${apiKey}`;
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     const entries = data.values;
-                    const scholarships = entries.filter(entry => entry[1] === category);
+                    const scholarships = entries.filter(entry => entry[1] === category); // Assuming category is in the second column
                     displayScholarships(scholarships);
                 })
                 .catch(error => console.error('Error fetching data:', error));
@@ -243,14 +193,14 @@
 
         function displayScholarships(scholarships) {
             let tableBody = document.getElementById('scholarship-list');
-            tableBody.innerHTML = '';
+            tableBody.innerHTML = '';  // Clear existing data
             scholarships.forEach(function(scholarship) {
                 let row = `<tr>
-                    <td data-label="Nama Beasiswa">${scholarship[0]}</td>
-                    <td data-label="Kategori/Jenjang">${scholarship[1]}</td>
-                    <td data-label="Deadline">${scholarship[2]}</td>
-                    <td data-label="Deskripsi">${scholarship[3]}</td>
-                    <td data-label="Link"><a href="${scholarship[4]}" target="_blank">Apply</a></td>
+                    <td>${scholarship[0]}</td>  <!-- Assuming name is in the first column -->
+                    <td>${scholarship[1]}</td>  <!-- Assuming category is in the second column -->
+                    <td>${scholarship[2]}</td>  <!-- Assuming deadline is in the third column -->
+                    <td>${scholarship[3]}</td>  <!-- Assuming description is in the fourth column -->
+                    <td><a href="${scholarship[4]}" target="_blank">Apply</a></td> <!-- Assuming link is in the fifth column -->
                 </tr>`;
                 tableBody.innerHTML += row;
             });
