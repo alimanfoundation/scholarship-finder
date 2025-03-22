@@ -96,10 +96,9 @@
             color: red;
             text-align: right;
         }
-        .apply-button {
+        .apply-button, .ask-button {
             display: inline-block;
             padding: 12px 24px;
-            background-color: #003366;
             color: white;
             text-decoration: none;
             border-radius: 8px;
@@ -107,8 +106,18 @@
             margin-top: 15px;
             text-align: center;
         }
+        .apply-button {
+            background-color: #003366;
+        }
         .apply-button:hover {
             background-color: #004f92;
+        }
+        .ask-button {
+            background-color: #28a745;
+            margin-left: 10px;
+        }
+        .ask-button:hover {
+            background-color: #218838;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -126,15 +135,16 @@
     </style>
 </head>
 <body>
-    <header>AIF Scholarship Finder By M Rizki</header>
+    <header>AIF Scholarship Finder</header>
     <div class="container">
         <div class="filter-buttons">
             <select id="categorySelect">
                 <option value="">Pilih Kategori / Jenjang</option>
+                <option value="Diploma">Diploma</option>
                 <option value="S1">S1 / Bachelor</option>
                 <option value="S2">S2 / Master</option>
                 <option value="S3">S3 / PhD</option>
-                <option value="General">General</option>
+                <option value="Umum">Umum</option>
             </select>
             <button id="searchButton">Search</button>
         </div>
@@ -146,6 +156,10 @@
     <script>
         document.getElementById('searchButton').addEventListener('click', function() {
             let category = document.getElementById('categorySelect').value;
+            if (category === "") {
+                alert("Pilih Kategori/Jenjang terlebih dahulu!");
+                return;
+            }
             fetchScholarships(category);
         });
 
@@ -188,6 +202,7 @@
                     <p><strong>Deadline:</strong> <span class="deadline">${scholarship[2]}</span></p>
                     <p><strong>Deskripsi:</strong> <span>${scholarship[3]}</span></p>
                     <a href="${scholarship[4]}" target="_blank" class="apply-button">Apply</a>
+                    <a href="https://ig.me/m/aliman.foundation" target="_blank" class="ask-button">Ask AIF</a>
                 `;
                 item.appendChild(details);
                 item.addEventListener('click', function() {
