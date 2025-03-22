@@ -88,23 +88,13 @@
             border-radius: 8px;
         }
         .scholarship-details p {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 20px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 5px;
-        }
-        .scholarship-details p strong {
-            white-space: nowrap;
-            text-align: left;
-        }
-        .scholarship-details p span {
-            text-align: right;
-            display: block;
-            margin-left: auto;
         }
         .deadline {
             color: red;
+            text-align: right;
         }
         .apply-button {
             display: inline-block;
@@ -156,11 +146,7 @@
     <script>
         document.getElementById('searchButton').addEventListener('click', function() {
             let category = document.getElementById('categorySelect').value;
-            if (category) {
-                fetchScholarships(category);
-            } else {
-                alert('Please select a category!');
-            }
+            fetchScholarships(category);
         });
 
         function fetchScholarships(category) {
@@ -177,7 +163,7 @@
                         return;
                     }
                     const entries = data.values.slice(1);
-                    const scholarships = entries.filter(entry => entry[1] === category);
+                    const scholarships = entries.filter(entry => entry[1].split(', ').includes(category));
                     displayScholarships(scholarships);
                 })
                 .catch(error => console.error('Error fetching data:', error));
@@ -190,10 +176,9 @@
                 listContainer.innerHTML = '<p>No scholarships found for this category.</p>';
                 return;
             }
-            scholarships.forEach((scholarship, index) => {
+            scholarships.forEach(scholarship => {
                 let item = document.createElement('div');
                 item.className = 'scholarship-item';
-                item.style.animationDelay = `${index * 0.1}s`;
                 item.innerHTML = `<strong>${scholarship[0]}</strong>`;
                 
                 let details = document.createElement('div');
@@ -204,7 +189,6 @@
                     <p><strong>Deskripsi:</strong> <span>${scholarship[3]}</span></p>
                     <a href="${scholarship[4]}" target="_blank" class="apply-button">Apply</a>
                 `;
-                
                 item.appendChild(details);
                 item.addEventListener('click', function() {
                     details.style.display = details.style.display === 'block' ? 'none' : 'block';
