@@ -11,125 +11,90 @@
             background-color: #f8f9fa;
             margin: 0;
             padding: 0;
-            text-align: center;
             display: flex;
             flex-direction: column;
+            align-items: center;
             min-height: 100vh;
         }
-        header {
+        header, footer {
             background-color: #003366;
             color: white;
             padding: 20px 0;
             font-size: 24px;
             font-weight: bold;
             width: 100%;
-            box-sizing: border-box;
+            text-align: center;
         }
         .container {
             width: 90%;
-            max-width: none;
             margin: 20px auto;
-            background: none;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
-            animation: fadeIn 0.5s ease-in-out;
+            text-align: center;
+            flex: 1;
         }
-        .filter-buttons {
-            margin-bottom: 20px;
+        .filter-container {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
-        .filter-buttons button, .filter-buttons select {
-            background-color: #003366;
-            color: white;
+        select, button {
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 8px;
             border: none;
-            padding: 12px 25px;
-            margin: 5px;
-            border-radius: 8px;  /* Slight rounding for a neat look */
             cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
+            transition: all 0.3s ease-in-out;
         }
-        .filter-buttons button:hover, .filter-buttons select:hover {
-            background-color: #004f92; /* Change to a darker blue for readability */
+        select {
+            width: 250px;
+            border: 2px solid black;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         }
-        .filter-buttons select {
-            appearance: none;
-            background-color: white;
-            color: black; /* Text color changed to black */
-            padding: 12px 25px;
-            font-size: 16px;
-            border-radius: 8px;  /* Slight rounding for the dropdown */
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 300px;  /* Adjusted to make the box longer */
-            position: relative;
-            border: 2px solid #003366; /* Added border for visibility */
+        button {
+            background-color: #003366;
+            color: white;
         }
-        .filter-buttons select:focus {
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 85, 170, 0.7);
+        button:hover {
+            background-color: #004f92;
+            transform: scale(1.05);
         }
-        .filter-buttons select:after {
-            content: '\2193'; /* Downwards arrow */
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 20px;
-            color: #003366;
-        }
-        .filter-buttons select:hover {
-            background-color: #ffffff;  /* Typical hover for dropdown (light blue) */
-            color: #003366; /* Text color changed to blue when hovering */
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 15px;
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
             text-align: left;
-            vertical-align: top;
         }
-        th {
-            background-color: #003366;
-            color: white;
+        .scholarship-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+            position: relative;
         }
-        tr:hover {
+        .scholarship-item:hover {
             background-color: #f1f1f1;
+            transform: translateY(-5px);
         }
-        td:nth-child(4) { /* Target the "Deskripsi" column */
-            white-space: pre-line; /* Preserve line breaks */
-            max-width: 400px;
-            word-wrap: break-word;
-        }
-        footer {
-            background-color: #003366;
-            color: white;
+        .scholarship-details {
+            display: none;
+            margin-top: 10px;
             padding: 10px;
-            font-size: 14px;
-            text-align: center;
-            margin-top: auto;
+            border-top: 1px solid #ccc;
+            animation: fadeIn 0.3s ease-in-out;
         }
         @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
     <header>Al Iman Foundation Scholarship Finder By M Rizki</header>
     <div class="container">
-        <div class="filter-buttons">
+        <div class="filter-container">
             <select id="categorySelect">
                 <option value="">Pilih Kategori / Jenjang</option>
                 <option value="S1">S1 / Bachelor</option>
@@ -139,53 +104,31 @@
             </select>
             <button id="searchButton">Search</button>
         </div>
-        <table id="scholarshipTable">
-            <thead>
-                <tr>
-                    <th>Nama Beasiswa</th>
-                    <th>Kategori/Jenjang</th>
-                    <th>Deadline</th>
-                    <th>Deskripsi</th>
-                    <th>Link</th>
-                </tr>
-            </thead>
-            <tbody id="scholarship-list">
-                <!-- Scholarships data will be inserted here -->
-            </tbody>
-        </table>
+        <div id="scholarship-list" class="grid-container"></div>
     </div>
     <footer>
-        ©2025 M Rizki Syahrul Mubarok
+        &copy;2025 M Rizki Syahrul Mubarok
     </footer>
-
     <script>
         document.getElementById('searchButton').addEventListener('click', function() {
             let category = document.getElementById('categorySelect').value;
             if (category) {
-                filterCategory(category);
+                fetchScholarships(category);
             } else {
                 alert('Please select a category!');
             }
         });
-
-        function filterCategory(category) {
-            document.getElementById('scholarshipTable').style.opacity = 0;
-            setTimeout(function() {
-                fetchScholarships(category);
-                document.getElementById('scholarshipTable').style.opacity = 1;
-            }, 500);
-        }
 
         function fetchScholarships(category) {
             const apiKey = 'AIzaSyCZXdufQVEmKG3LXP2fXZmDZUTOZZmBivI';
             const spreadsheetId = '1wGCTUp_gm4nM4QBkBJfyGEjMefaIzR2RLVwzYzwrk0U';
             const sheetName = 'Sheet1';
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=${apiKey}`;
-
+            
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    const entries = data.values;
+                    const entries = data.values.slice(1);
                     const scholarships = entries.filter(entry => entry[1] === category);
                     displayScholarships(scholarships);
                 })
@@ -193,17 +136,32 @@
         }
 
         function displayScholarships(scholarships) {
-            let tableBody = document.getElementById('scholarship-list');
-            tableBody.innerHTML = '';
-            scholarships.forEach(function(scholarship) {
-                let row = `<tr>
-                    <td>${scholarship[0]}</td>
-                    <td>${scholarship[1]}</td>
-                    <td>${scholarship[2]}</td>
-                    <td>${scholarship[3].replace(/\n/g, "<br>")}</td> <!-- Preserve line breaks -->
-                    <td><a href="${scholarship[4]}" target="_blank">Apply</a></td>
-                </tr>`;
-                tableBody.innerHTML += row;
+            let listContainer = document.getElementById('scholarship-list');
+            listContainer.innerHTML = '';
+            scholarships.forEach(scholarship => {
+                let item = document.createElement('div');
+                item.className = 'scholarship-item';
+                item.innerHTML = `<strong>${scholarship[0]}</strong>`;
+
+                let details = document.createElement('div');
+                details.className = 'scholarship-details';
+                details.innerHTML = `
+                    <p><strong>Kategori/Jenjang:</strong> ${scholarship[1]}</p>
+                    <p><strong>Deadline:</strong> ${scholarship[2]}</p>
+                    <p><strong>Deskripsi:</strong> ${scholarship[3].replace(/\n/g, '<br>')}</p>
+                    <p><a href="${scholarship[4]}" target="_blank">Apply</a></p>
+                `;
+
+                item.addEventListener('click', function(event) {
+                    document.querySelectorAll('.scholarship-details').forEach(el => {
+                        if (el !== details) el.style.display = 'none';
+                    });
+                    details.style.display = details.style.display === 'block' ? 'none' : 'block';
+                    event.stopPropagation();
+                });
+
+                item.appendChild(details);
+                listContainer.appendChild(item);
             });
         }
     </script>
