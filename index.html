@@ -84,7 +84,7 @@
             border-top: 1px solid #ccc;
             font-size: 16px;
             line-height: 1.8;
-            background: #none;
+            background: none;
             border-radius: 8px;
         }
         .scholarship-details p {
@@ -102,6 +102,9 @@
             text-align: left;
             display: block;
             margin-left: auto;
+        }
+        .deadline {
+            color: red;
         }
         .apply-button {
             display: inline-block;
@@ -197,7 +200,7 @@
                 details.className = 'scholarship-details';
                 details.innerHTML = `
                     <p><strong>Kategori/Jenjang:</strong> <span>${scholarship[1]}</span></p>
-                    <p><strong>Deadline:</strong> <span>${scholarship[2]}</span></p>
+                    <p><strong>Deadline:</strong> <span class="deadline">${scholarship[2]}</span></p>
                     <p><strong>Deskripsi:</strong> <span>${scholarship[3]}</span></p>
                     <a href="${scholarship[4]}" target="_blank" class="apply-button">Apply</a>
                 `;
