@@ -11,90 +11,96 @@
             background-color: #f8f9fa;
             margin: 0;
             padding: 0;
+            text-align: center;
             display: flex;
             flex-direction: column;
-            align-items: center;
             min-height: 100vh;
         }
-        header, footer {
+        header {
             background-color: #003366;
             color: white;
-            padding: 20px 0;
-            font-size: 24px;
+            padding: 25px 0;
+            font-size: 28px;
             font-weight: bold;
             width: 100%;
+            box-sizing: border-box;
             text-align: center;
         }
         .container {
             width: 90%;
+            max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            text-align: center;
             flex: 1;
+            text-align: left;
         }
-        .filter-container {
+        .filter-buttons {
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            gap: 10px;
+            align-items: center;
             margin-bottom: 20px;
         }
-        select, button {
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
         select {
-            width: 250px;
-            border: 2px solid black;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            flex-grow: 1;
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: white;
         }
         button {
             background-color: #003366;
             color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
         }
         button:hover {
             background-color: #004f92;
-            transform: scale(1.05);
-        }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            text-align: left;
         }
         .scholarship-item {
             background: white;
             padding: 15px;
+            margin: 10px 0;
             border-radius: 8px;
-            cursor: pointer;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease-in-out;
-            position: relative;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.5s ease-out forwards;
         }
         .scholarship-item:hover {
             background-color: #f1f1f1;
-            transform: translateY(-5px);
         }
         .scholarship-details {
             display: none;
             margin-top: 10px;
             padding: 10px;
             border-top: 1px solid #ccc;
-            animation: fadeIn 0.3s ease-in-out;
+            font-size: 16px;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        footer {
+            background-color: #003366;
+            color: white;
+            padding: 15px;
+            font-size: 16px;
+            text-align: center;
+            width: 100%;
+            margin-top: auto;
         }
     </style>
 </head>
 <body>
     <header>Al Iman Foundation Scholarship Finder By M Rizki</header>
     <div class="container">
-        <div class="filter-container">
+        <div class="filter-buttons">
             <select id="categorySelect">
                 <option value="">Pilih Kategori / Jenjang</option>
                 <option value="S1">S1 / Bachelor</option>
@@ -104,10 +110,10 @@
             </select>
             <button id="searchButton">Search</button>
         </div>
-        <div id="scholarship-list" class="grid-container"></div>
+        <div id="scholarship-list"></div>
     </div>
     <footer>
-        &copy;2025 M Rizki Syahrul Mubarok
+        &copy; 2025 M Rizki Syahrul Mubarok
     </footer>
     <script>
         document.getElementById('searchButton').addEventListener('click', function() {
@@ -138,9 +144,10 @@
         function displayScholarships(scholarships) {
             let listContainer = document.getElementById('scholarship-list');
             listContainer.innerHTML = '';
-            scholarships.forEach(scholarship => {
+            scholarships.forEach((scholarship, index) => {
                 let item = document.createElement('div');
                 item.className = 'scholarship-item';
+                item.style.animationDelay = `${index * 0.1}s`; // Delay each item for better effect
                 item.innerHTML = `<strong>${scholarship[0]}</strong>`;
 
                 let details = document.createElement('div');
@@ -152,12 +159,12 @@
                     <p><a href="${scholarship[4]}" target="_blank">Apply</a></p>
                 `;
 
-                item.addEventListener('click', function(event) {
-                    document.querySelectorAll('.scholarship-details').forEach(el => {
-                        if (el !== details) el.style.display = 'none';
-                    });
-                    details.style.display = details.style.display === 'block' ? 'none' : 'block';
-                    event.stopPropagation();
+                item.addEventListener('click', function() {
+                    if (details.style.display === 'block') {
+                        details.style.display = 'none';
+                    } else {
+                        details.style.display = 'block';
+                    }
                 });
 
                 item.appendChild(details);
