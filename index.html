@@ -6,15 +6,17 @@
     <title>Al Iman Foundation Scholarship Finder</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8f9fa;
+        * {
             margin: 0;
             padding: 0;
-            text-align: center;
+            box-sizing: border-box;
+        }
+        html, body {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8f9fa;
         }
         header {
             background-color: #003366;
@@ -23,15 +25,14 @@
             font-size: 28px;
             font-weight: bold;
             width: 100%;
-            box-sizing: border-box;
             text-align: center;
         }
         .container {
+            flex: 1; /* Expands to fill space */
             width: 90%;
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            flex: 1;
             text-align: left;
         }
         .filter-buttons {
@@ -134,6 +135,10 @@
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
+                    if (!data.values) {
+                        console.error('Error: No data found in the sheet.');
+                        return;
+                    }
                     const entries = data.values.slice(1);
                     const scholarships = entries.filter(entry => entry[1] === category);
                     displayScholarships(scholarships);
@@ -144,10 +149,14 @@
         function displayScholarships(scholarships) {
             let listContainer = document.getElementById('scholarship-list');
             listContainer.innerHTML = '';
+            if (scholarships.length === 0) {
+                listContainer.innerHTML = '<p>No scholarships found for this category.</p>';
+                return;
+            }
             scholarships.forEach((scholarship, index) => {
                 let item = document.createElement('div');
                 item.className = 'scholarship-item';
-                item.style.animationDelay = `${index * 0.1}s`; // Delay each item for better effect
+                item.style.animationDelay = `${index * 0.1}s`;
                 item.innerHTML = `<strong>${scholarship[0]}</strong>`;
 
                 let details = document.createElement('div');
@@ -155,16 +164,12 @@
                 details.innerHTML = `
                     <p><strong>Kategori/Jenjang:</strong> ${scholarship[1]}</p>
                     <p><strong>Deadline:</strong> ${scholarship[2]}</p>
-                    <p><strong>Deskripsi:</strong> ${scholarship[3].replace(/\n/g, '<br>')}</p>
+                    <p><strong>Deskripsi:</strong> ${scholarship[3] ? scholarship[3].replace(/\n/g, '<br>') : 'No description available'}</p>
                     <p><a href="${scholarship[4]}" target="_blank">Apply</a></p>
                 `;
 
                 item.addEventListener('click', function() {
-                    if (details.style.display === 'block') {
-                        details.style.display = 'none';
-                    } else {
-                        details.style.display = 'block';
-                    }
+                    details.style.display = details.style.display === 'block' ? 'none' : 'block';
                 });
 
                 item.appendChild(details);
