@@ -21,14 +21,14 @@
         header {
             background-color: #003366;
             color: white;
-            padding: 25px 0;
-            font-size: 28px;
+            padding: 15px 0;
+            font-size: 24px;
             font-weight: bold;
             width: 100%;
             text-align: center;
         }
         .container {
-            flex: 1; /* Expands to fill space */
+            flex: 1;
             width: 90%;
             max-width: 800px;
             margin: 20px auto;
@@ -72,6 +72,7 @@
             opacity: 0;
             transform: translateY(10px);
             animation: fadeIn 0.5s ease-out forwards;
+            cursor: pointer;
         }
         .scholarship-item:hover {
             background-color: #f1f1f1;
@@ -79,9 +80,42 @@
         .scholarship-details {
             display: none;
             margin-top: 10px;
-            padding: 10px;
+            padding: 20px;
             border-top: 1px solid #ccc;
             font-size: 16px;
+            line-height: 1.8;
+            background: #none;
+            border-radius: 8px;
+        }
+        .scholarship-details p {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .scholarship-details p strong {
+            white-space: nowrap;
+            text-align: left;
+        }
+        .scholarship-details p span {
+            text-align: left;
+            display: block;
+            margin-left: auto;
+        }
+        .apply-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #003366;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        .apply-button:hover {
+            background-color: #004f92;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -158,21 +192,20 @@
                 item.className = 'scholarship-item';
                 item.style.animationDelay = `${index * 0.1}s`;
                 item.innerHTML = `<strong>${scholarship[0]}</strong>`;
-
+                
                 let details = document.createElement('div');
                 details.className = 'scholarship-details';
                 details.innerHTML = `
-                    <p><strong>Kategori/Jenjang:</strong> ${scholarship[1]}</p>
-                    <p><strong>Deadline:</strong> ${scholarship[2]}</p>
-                    <p><strong>Deskripsi:</strong> ${scholarship[3] ? scholarship[3].replace(/\n/g, '<br>') : 'No description available'}</p>
-                    <p><a href="${scholarship[4]}" target="_blank">Apply</a></p>
+                    <p><strong>Kategori/Jenjang:</strong> <span>${scholarship[1]}</span></p>
+                    <p><strong>Deadline:</strong> <span>${scholarship[2]}</span></p>
+                    <p><strong>Deskripsi:</strong> <span>${scholarship[3]}</span></p>
+                    <a href="${scholarship[4]}" target="_blank" class="apply-button">Apply</a>
                 `;
-
+                
+                item.appendChild(details);
                 item.addEventListener('click', function() {
                     details.style.display = details.style.display === 'block' ? 'none' : 'block';
                 });
-
-                item.appendChild(details);
                 listContainer.appendChild(item);
             });
         }
