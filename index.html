@@ -11,6 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         html, body {
             min-height: 100vh;
             display: flex;
@@ -18,6 +19,7 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f8f9fa;
         }
+
         header {
             background-color: #003366;
             color: white;
@@ -27,6 +29,7 @@
             width: 100%;
             text-align: center;
         }
+
         .container {
             flex: 1;
             width: 90%;
@@ -35,12 +38,14 @@
             padding: 20px;
             text-align: left;
         }
+
         .filter-buttons {
             display: flex;
             gap: 10px;
             align-items: center;
             margin-bottom: 20px;
         }
+
         select {
             flex-grow: 1;
             padding: 12px;
@@ -49,6 +54,7 @@
             border: 1px solid #ccc;
             background: white;
         }
+
         button {
             background-color: #003366;
             color: white;
@@ -58,71 +64,109 @@
             cursor: pointer;
             font-size: 16px;
         }
+
         button:hover {
             background-color: #004f92;
         }
+        .ask-aif {
+            background-color: #2ab135;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            float: right;
+            margin-top: -90px;
+            margin-right: 0px;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .ask-aif:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 177, 53, 0.4);
+        }
         .scholarship-item {
-            background: white;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            background: #;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
             transition: all 0.3s ease;
-            font-size: 18px;
             opacity: 0;
             transform: translateY(10px);
             animation: fadeIn 0.5s ease-out forwards;
-            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
         }
+
         .scholarship-item:hover {
-            background-color: #f1f1f1;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
         }
-        .scholarship-details {
-            display: none;
-            margin-top: 10px;
-            padding: 20px;
-            border-top: 1px solid #ccc;
+
+        .category-label {
             font-size: 16px;
-            line-height: 1.8;
-            background: none;
-            border-radius: 8px;
+            color: green;
+            margin-bottom: 10px;
         }
-        .scholarship-details p {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+
+        .scholarship-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #000;
         }
-        .deadline {
+
+        .deadline-text {
             color: red;
-            text-align: right;
+            font-size: 15px;
+            margin-bottom: 15px;
         }
-        .apply-button, .ask-button {
-            display: inline-block;
-            padding: 12px 24px;
+
+        .scholarship-amount {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #000;
+        }
+
+        .apply-now {
+            background-color: #0066ff;
             color: white;
+            padding: 10px 24px;
+            border-radius: 25px;
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            float: right;
+            margin-top: -40px;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .apply-now:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.4);
+        }
+
+        .apply-now:after {
+            content: "↗";
+            margin-left: 5px;
+        }
+
+        .toggle-details {
+            color: #0066ff;
+            text-decoration: none;
+            cursor: pointer;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .scholarship-details {
             margin-top: 15px;
-            text-align: center;
+            display: none;
+            line-height: 1.6;
+            color: #000000;
         }
-        .apply-button {
-            background-color: #003366;
-        }
-        .apply-button:hover {
-            background-color: #004f92;
-        }
-        .ask-button {
-            background-color: #28a745;
-            margin-left: 10px;
-        }
-        .ask-button:hover {
-            background-color: #218838;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+
         footer {
             background-color: #003366;
             color: white;
@@ -132,6 +176,115 @@
             width: 100%;
             margin-top: auto;
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+<style>
+    .scholarship-details {
+        margin-top: 20px;
+        padding: 20px;
+        background: none;
+        border-radius: 10px;
+        display: none;
+        line-height: 1.6;
+        color: #000000;
+        transform-origin: top;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .scholarship-details.active {
+        display: block;
+        animation: slideDown 0.3s ease forwards;
+    }
+
+    .details-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .details-row:last-child {
+        border-bottom: none;
+    }
+
+    .details-label {
+        font-weight: 500;
+        color: #666;
+    }
+
+    .details-value {
+        color: #000000;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: scaleY(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scaleY(1);
+        }
+    }
+</style>
+
+<!-- Update the displayScholarships function -->
+<script>
+    function displayScholarships(scholarships) {
+        // ... existing code ...
+
+        scholarships.forEach(scholarship => {
+            let item = document.createElement('div');
+            item.className = 'scholarship-item';
+            
+            item.innerHTML = `
+                <div class="category-label">${scholarship[1]}</div>
+                <div class="scholarship-name">${scholarship[0]}</div>
+                <div class="deadline-text">Due: ${scholarship[2]} | No Essays</div>
+                <div class="scholarship-amount">${scholarship[3]}</div>
+                <a href="${scholarship[4]}" target="_blank" class="apply-now">Apply now</a>
+                <a class="toggle-details" onclick="toggleDetails(this)">View scholarship details</a>
+                <div class="scholarship-details">
+                    <div class="details-row">
+                        <span class="details-label">Category</span>
+                        <span class="details-value">${scholarship[1]}</span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-label">Deadline</span>
+                        <span class="details-value">${scholarship[2]}</span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-label">Award</span>
+                        <span class="details-value">${scholarship[3]}</span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-label">Description</span>
+                        <span class="details-value">${scholarship[3]}</span>
+                    </div>
+                </div>
+            `;
+
+            listContainer.appendChild(item);
+        });
+    }
+
+    function toggleDetails(element) {
+        const details = element.nextElementSibling;
+        const isHidden = !details.classList.contains('active');
+        details.classList.toggle('active');
+        element.textContent = isHidden ? 'Hide scholarship details' : 'View scholarship details';
+    }
+</script>
     </style>
 </head>
 <body>
@@ -150,9 +303,8 @@
         </div>
         <div id="scholarship-list"></div>
     </div>
-    <footer>
-        &copy; 2025 M Rizki Syahrul Mubarok
-    </footer>
+    <footer>&copy; 2025 M Rizki Syahrul Mubarok</footer>
+
     <script>
         document.getElementById('searchButton').addEventListener('click', function() {
             let category = document.getElementById('categorySelect').value;
@@ -168,7 +320,7 @@
             const spreadsheetId = '1wGCTUp_gm4nM4QBkBJfyGEjMefaIzR2RLVwzYzwrk0U';
             const sheetName = 'Sheet1';
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=${apiKey}`;
-            
+
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -186,30 +338,36 @@
         function displayScholarships(scholarships) {
             let listContainer = document.getElementById('scholarship-list');
             listContainer.innerHTML = '';
+
             if (scholarships.length === 0) {
                 listContainer.innerHTML = '<p>No scholarships found for this category.</p>';
                 return;
             }
+
             scholarships.forEach(scholarship => {
                 let item = document.createElement('div');
                 item.className = 'scholarship-item';
-                item.innerHTML = `<strong>${scholarship[0]}</strong>`;
                 
-                let details = document.createElement('div');
-                details.className = 'scholarship-details';
-                details.innerHTML = `
-                    <p><strong>Kategori/Jenjang:</strong> <span>${scholarship[1]}</span></p>
-                    <p><strong>Deadline:</strong> <span class="deadline">${scholarship[2]}</span></p>
-                    <p><strong>Deskripsi:</strong> <span>${scholarship[3]}</span></p>
-                    <a href="${scholarship[4]}" target="_blank" class="apply-button">Apply</a>
-                    <a href="https://ig.me/m/aliman.foundation" target="_blank" class="ask-button">Ask AIF</a>
+                item.innerHTML = `
+                    <div class="category-label">${scholarship[1]}</div>
+                    <div class="scholarship-name">${scholarship[0]}</div>
+                    <div class="deadline-text">Due: ${scholarship[2]}</div>
+                    <div class="scholarship-amount">${scholarship[4]}</div>
+                    <a href="https://www.instagram.com/m/aliman.foundation" target="_blank" class="ask-aif">Ask AIF</a>
+                    <a href="${scholarship[5]}" target="_blank" class="apply-now">Apply now</a>
+                    <a class="toggle-details" onclick="toggleDetails(this)">View scholarship details</a>
+                    <div class="scholarship-details">${scholarship[3]}</div>
                 `;
-                item.appendChild(details);
-                item.addEventListener('click', function() {
-                    details.style.display = details.style.display === 'block' ? 'none' : 'block';
-                });
+
                 listContainer.appendChild(item);
             });
+        }
+
+        function toggleDetails(element) {
+            const details = element.nextElementSibling;
+            const isHidden = details.style.display === 'none' || details.style.display === '';
+            details.style.display = isHidden ? 'block' : 'none';
+            element.textContent = isHidden ? 'Hide scholarship details' : 'View scholarship details';
         }
     </script>
 </body>
